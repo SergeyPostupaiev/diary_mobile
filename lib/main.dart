@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'view/loginPage.dart';
+import './view/loginPage.dart';
+import './view/RegisterPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,8 +13,14 @@ class MyApp extends StatelessWidget {
       title: 'Diary',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        accentColor: Colors.amber,
+        canvasColor: Color.fromRGBO(255, 254, 229, 1),
       ),
       home: MainPage(),
+      routes: {
+        LoginPage.routeName: (ctx) => LoginPage(),
+        RegisterPage.routeName: (ctx) => RegisterPage(),
+      },
     );
   }
 }
@@ -63,7 +70,7 @@ class _MainPageState extends State<MainPage> {
       drawer: Drawer(
           child: new ListView(children: <Widget>[
         new UserAccountsDrawerHeader(
-            accountName: new Text('Nodejs'),
+            accountName: new Text('John Doe'),
             accountEmail: new Text('jdoe@gmail.com')),
         new ListTile(
             title: new Text('List Animals'),

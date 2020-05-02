@@ -1,14 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../main.dart';
+import '../widgets/button_submit.dart';
+import '../widgets/login_inputs.dart';
+import './RegisterPage.dart';
 
 class LoginPage extends StatefulWidget {
+  static String routeName = '/login';
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -21,27 +27,74 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light
-        .copyWith(statusBarColor: Colors.transparent));
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light
+    //     .copyWith(statusBarColor: Colors.transparent));
     return Scaffold(
-        body: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [Colors.blue, Colors.teal],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter)),
-            child: _isLoading
-                ? Center(child: CircularProgressIndicator())
-                : ListView(children: <Widget>[
-                    headerSection(),
-                    textSection(),
-                    buttonSection()
-                  ])));
+      appBar: AppBar(
+        title: Text('Diary'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.language,
+            ),
+            onPressed: () => {},
+          )
+        ],
+      ),
+      body: Container(
+        child: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                child: ListView(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 150,
+                      child: Center(
+                        child: Text(
+                          'Sign In',
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    LoginInputs(
+                      formSubmit: formSubmit,
+                      emailController: emailController,
+                      passwordController: passwordController,
+                    ),
+                    BtnSubmit(formSubmit: formSubmit, btnText: 'Sign In'),
+                    Column(
+                      children: <Widget>[
+                        FlatButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(RegisterPage.routeName);
+                          },
+                          child: Text(
+                            'Do not have an account?',
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+      ),
+    );
   }
 
   signIn(String email, password) async {
     SharedPreferences sharedPreference = await SharedPreferences.getInstance();
-    Map data = {"email": "$email", "password": "$password"};
+
+    var data = {"email": email, "password": password};
 
     print(data);
 
@@ -49,10 +102,9 @@ class _LoginPageState extends State<LoginPage> {
 
     var response = await http.post('https://diary-rest.herokuapp.com/api/auth',
         headers: {HttpHeaders.contentTypeHeader: "application/json"},
-        body: json.encode({"email": email, "password": password}));
+        body: json.encode(data));
     result = json.decode(response.body);
 
-    print('Response status: ${response.statusCode}');
     print('Response status: ${response.body}');
 
     if (result != null) {
@@ -73,70 +125,27 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Container buttonSection() {
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        height: 40.0,
-        padding: EdgeInsets.symmetric(horizontal: 15.0),
-        child: RaisedButton(
-          onPressed: emailController.text == '' || passwordController.text == ''
-              ? null
-              : () {
-                  setState(() {
-                    _isLoading = true;
-                  });
+  void showSnackBar(String msg) {
+    print(passwordController.text);
+    print(emailController.text);
 
-                  signIn(emailController.text, passwordController.text);
-                },
-          elevation: 0.0,
-          color: Colors.purple,
-          child: Text('Sign In', style: TextStyle(color: Colors.white70)),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        ));
-  }
-
-  Container textSection() {
-    return Container(
-        padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-        child: Column(children: <Widget>[
-          TextField(
-            controller: emailController,
-            cursorColor: Colors.white,
-            style: TextStyle(color: Colors.white70),
-            decoration: InputDecoration(
-              icon: Icon(Icons.email, color: Colors.white70),
-              hintText: 'Email',
-              border: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white70)),
-              hintStyle: TextStyle(color: Colors.white),
-            ),
-          ),
-          SizedBox(height: 30.0),
-          TextField(
-            controller: passwordController,
-            cursorColor: Colors.white,
-            style: TextStyle(color: Colors.white70),
-            decoration: InputDecoration(
-              icon: Icon(Icons.lock, color: Colors.white70),
-              hintText: 'Password',
-              border: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white70)),
-              hintStyle: TextStyle(color: Colors.white),
-            ),
-          ),
-        ]));
-  }
-
-  Container headerSection() {
-    return Container(
-      margin: EdgeInsets.only(top: 50.0),
-      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
-      child: Text(
-        'Login page',
-        style: TextStyle(
-            color: Colors.white70, fontSize: 40.0, fontWeight: FontWeight.bold),
-      ),
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      timeInSecForIosWeb: 1,
+      fontSize: 16.0,
     );
+  }
+
+  void formSubmit() {
+    if (emailController.text == '' || passwordController.text == '') {
+      showSnackBar('Fill al the inputs, please');
+    } else {
+      setState(() {
+        _isLoading = true;
+      });
+
+      signIn(emailController.text, passwordController.text);
+    }
   }
 }
