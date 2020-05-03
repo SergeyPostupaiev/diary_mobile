@@ -72,8 +72,11 @@ class _LoginPageState extends State<LoginPage> {
                       children: <Widget>[
                         FlatButton(
                           onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(RegisterPage.routeName);
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        RegisterPage()),
+                                (Route<dynamic> route) => false);
                           },
                           child: Text(
                             'Do not have an account?',
@@ -108,6 +111,29 @@ class _LoginPageState extends State<LoginPage> {
     print('Response status: ${response.body}');
 
     if (result != null) {
+      handleRequest(result, sharedPreference);
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+
+      print(response.body);
+    }
+  }
+
+  void handleRequest(result, SharedPreferences sharedPreference) {
+    setState(() {
+      _isLoading = false;
+    });
+    print(result);
+    if (result['status'] == 'error') {
+      if (result['msg'] is String) {
+        showSnackBar(result['msg']);
+      }
+      if (result['errors'] != null) {
+        showSnackBar(result['errors'][0]['msg']);
+      }
+    } else {
       setState(() {
         _isLoading = false;
       });
@@ -116,12 +142,6 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => MainPage()),
           (Route<dynamic> route) => false);
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-
-      print(response.body);
     }
   }
 
@@ -139,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void formSubmit() {
     if (emailController.text == '' || passwordController.text == '') {
-      showSnackBar('Fill al the inputs, please');
+      showSnackBar('Fill all the inputs, please');
     } else {
       setState(() {
         _isLoading = true;

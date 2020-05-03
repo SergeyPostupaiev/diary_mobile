@@ -38,7 +38,7 @@ class _LoginInputsState extends State<LoginInputs> {
             obscureText: true,
             controller: widget.passwordController,
             decoration: InputDecoration(
-              icon: Icon(Icons.email),
+              icon: Icon(Icons.lock),
               hintText: 'Password',
               border: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.white70)),
