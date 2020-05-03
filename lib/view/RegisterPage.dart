@@ -10,6 +10,7 @@ import '../main.dart';
 import '../widgets/button_submit.dart';
 import '../widgets/register_inputs.dart';
 import './LoginPage.dart';
+import '../localization/i18value.dart';
 
 class RegisterPage extends StatefulWidget {
   static String routeName = '/login';
@@ -28,6 +29,53 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController confirmPasswordController =
       new TextEditingController();
 
+  SharedPreferences sharedPreferences;
+  InterfaceLanguages lang = InterfaceLanguages.en;
+
+  void setLang(InterfaceLanguages value) async {
+    Locale localeVar;
+
+    if (value == InterfaceLanguages.en) {
+      localeVar = Locale('en', 'US');
+      setLanguage('en', 'US');
+    }
+
+    if (value == InterfaceLanguages.uk) {
+      localeVar = Locale('uk', 'UA');
+      setLanguage('uk', 'UA');
+    }
+
+    setState(() {
+      lang = value;
+    });
+
+    MyApp.setLocale(context, localeVar);
+    Navigator.of(context).pop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    checkCurrentLang();
+  }
+
+  checkCurrentLang() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    var currLang = sharedPreferences.getString('langCode');
+
+    if (currLang == 'en') {
+      setState(() {
+        lang = InterfaceLanguages.en;
+      });
+    } else if (currLang == 'uk') {
+      setState(() {
+        lang = InterfaceLanguages.uk;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
             icon: Icon(
               Icons.language,
             ),
-            onPressed: () => {},
+            onPressed: () => showAlertDialog(context),
           )
         ],
       ),
@@ -55,7 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 100,
                       child: Center(
                         child: Text(
-                          'Create Your account',
+                          i18value(context, 'New_account'),
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
@@ -182,5 +230,42 @@ class _RegisterPageState extends State<RegisterPage> {
         surnameController.text,
       );
     }
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text('Choose the language'),
+      content: Container(
+        height: 130,
+        child: Column(
+          children: <Widget>[
+            buildRadioButton('English', InterfaceLanguages.en),
+            buildRadioButton('Українська', InterfaceLanguages.uk),
+          ],
+        ),
+      ),
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  Widget buildRadioButton(
+    String titleText,
+    InterfaceLanguages langValue,
+  ) {
+    return RadioListTile<InterfaceLanguages>(
+      title: Text(titleText),
+      value: langValue,
+      groupValue: lang,
+      onChanged: (InterfaceLanguages value) => setLang(value),
+      activeColor: Colors.blue,
+    );
   }
 }

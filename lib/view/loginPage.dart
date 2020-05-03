@@ -11,6 +11,7 @@ import '../main.dart';
 import '../widgets/button_submit.dart';
 import '../widgets/login_inputs.dart';
 import './RegisterPage.dart';
+import '../localization/i18value.dart';
 
 class LoginPage extends StatefulWidget {
   static String routeName = '/login';
@@ -20,15 +21,60 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  SharedPreferences sharedPreferences;
+  InterfaceLanguages lang = InterfaceLanguages.en;
+
+  void setLang(InterfaceLanguages value) async {
+    Locale localeVar;
+
+    if (value == InterfaceLanguages.en) {
+      localeVar = Locale('en', 'US');
+      setLanguage('en', 'US');
+    }
+
+    if (value == InterfaceLanguages.uk) {
+      localeVar = Locale('uk', 'UA');
+      setLanguage('uk', 'UA');
+    }
+
+    setState(() {
+      lang = value;
+    });
+
+    MyApp.setLocale(context, localeVar);
+    Navigator.of(context).pop();
+  }
+
   bool _isLoading = false;
 
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+
+    checkCurrentLang();
+  }
+
+  checkCurrentLang() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    var currLang = sharedPreferences.getString('langCode');
+
+    if (currLang == 'en') {
+      setState(() {
+        lang = InterfaceLanguages.en;
+      });
+    } else if (currLang == 'uk') {
+      setState(() {
+        lang = InterfaceLanguages.uk;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light
-    //     .copyWith(statusBarColor: Colors.transparent));
     return Scaffold(
       appBar: AppBar(
         title: Text('Diary'),
@@ -37,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
             icon: Icon(
               Icons.language,
             ),
-            onPressed: () => {},
+            onPressed: () => showAlertDialog(context),
           )
         ],
       ),
@@ -54,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 150,
                       child: Center(
                         child: Text(
-                          'Sign In',
+                          i18value(context, 'Sign_In'),
                           style: TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
@@ -168,4 +214,43 @@ class _LoginPageState extends State<LoginPage> {
       signIn(emailController.text, passwordController.text);
     }
   }
+
+  showAlertDialog(BuildContext context) {
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text('Choose the language'),
+      content: Container(
+        height: 130,
+        child: Column(
+          children: <Widget>[
+            buildRadioButton('English', InterfaceLanguages.en),
+            buildRadioButton('Українська', InterfaceLanguages.uk),
+          ],
+        ),
+      ),
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  Widget buildRadioButton(
+    String titleText,
+    InterfaceLanguages langValue,
+  ) {
+    return RadioListTile<InterfaceLanguages>(
+      title: Text(titleText),
+      value: langValue,
+      groupValue: lang,
+      onChanged: (InterfaceLanguages value) => setLang(value),
+      activeColor: Colors.blue,
+    );
+  }
 }
+
+enum InterfaceLanguages { en, uk }

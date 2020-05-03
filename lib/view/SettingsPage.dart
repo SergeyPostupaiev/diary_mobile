@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
 
@@ -14,6 +15,8 @@ class SettingPage extends StatefulWidget {
 enum InterfaceLanguages { en, uk }
 
 class _SettingPageState extends State<SettingPage> {
+  SharedPreferences sharedPreferences;
+
   InterfaceLanguages lang = InterfaceLanguages.en;
 
   void setLang(InterfaceLanguages value) async {
@@ -35,6 +38,29 @@ class _SettingPageState extends State<SettingPage> {
 
     MyApp.setLocale(context, localeVar);
     Navigator.of(context).pop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    checkCurrentLang();
+  }
+
+  checkCurrentLang() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    var currLang = sharedPreferences.getString('langCode');
+
+    if (currLang == 'en') {
+      setState(() {
+        lang = InterfaceLanguages.en;
+      });
+    } else if (currLang == 'uk') {
+      setState(() {
+        lang = InterfaceLanguages.uk;
+      });
+    }
   }
 
   @override
@@ -68,8 +94,6 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   showAlertDialog(BuildContext context) {
-    // set up the button
-
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text('Choose the language'),
