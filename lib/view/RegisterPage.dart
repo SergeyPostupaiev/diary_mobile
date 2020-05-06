@@ -119,7 +119,10 @@ class _RegisterPageState extends State<RegisterPage> {
                       surnameController: surnameController,
                       confirmPasswordController: confirmPasswordController,
                     ),
-                    BtnSubmit(formSubmit: formSubmit, btnText: 'Get started'),
+                    BtnSubmit(
+                      formSubmit: formSubmit,
+                      btnText: i18value(context, 'get_started'),
+                    ),
                     Column(
                       children: <Widget>[
                         FlatButton(
@@ -131,7 +134,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 (Route<dynamic> route) => false);
                           },
                           child: Text(
-                            'Already have an account?',
+                            i18value(context, 'already_have_acc'),
                             style: TextStyle(
                               decoration: TextDecoration.underline,
                             ),
@@ -215,9 +218,9 @@ class _RegisterPageState extends State<RegisterPage> {
         passwordController.text == '' ||
         nameController.text == '' ||
         surnameController.text == '') {
-      showSnackBar('Fill all the inputs, please');
+      showSnackBar(i18value(context, 'fill_all_inp'));
     } else if (passwordController.text != confirmPasswordController.text) {
-      showSnackBar('Passwords should match');
+      showSnackBar(i18value(context, 'pass_should_match'));
     } else {
       setState(() {
         _isLoading = true;
@@ -235,7 +238,7 @@ class _RegisterPageState extends State<RegisterPage> {
   showAlertDialog(BuildContext context) {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text('Choose the language'),
+      title: Text(i18value(context, 'lang_choose')),
       content: Container(
         height: 130,
         child: Column(

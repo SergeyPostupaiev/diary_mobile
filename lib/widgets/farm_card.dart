@@ -2,6 +2,8 @@ import 'package:diary_mobile/view/ConcreteFarmPage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../localization/i18value.dart';
+
 class FarmCard extends StatelessWidget {
   final String name;
   final double humidity;
@@ -32,7 +34,7 @@ class FarmCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Name:'),
+          Text(i18value(context, 'name_item')),
           Text(
             name,
             style: TextStyle(
@@ -44,7 +46,7 @@ class FarmCard extends StatelessWidget {
           Row(
             children: <Widget>[
               Tooltip(
-                message: 'Temperature',
+                message: i18value(context, 'temperature'),
                 child: IconButton(
                     icon: Icon(
                       Icons.format_size,
@@ -60,7 +62,7 @@ class FarmCard extends StatelessWidget {
           Row(
             children: <Widget>[
               Tooltip(
-                message: 'Humidity',
+                message: i18value(context, 'humidity'),
                 child: IconButton(
                     icon: Icon(
                       Icons.scatter_plot,

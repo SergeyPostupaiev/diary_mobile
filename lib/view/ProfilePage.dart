@@ -9,6 +9,8 @@ import './LoginPage.dart';
 import './SettingsPage.dart';
 import '../widgets/farm_card.dart';
 
+import '../localization/i18value.dart';
+
 class ProfilePage extends StatefulWidget {
   static String routeName = '/profile';
 
@@ -78,17 +80,30 @@ class _ProfilePageState extends State<ProfilePage> {
     } else {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Your Farms', style: TextStyle(color: Colors.white)),
+          title: Text(i18value(context, 'your_farms'),
+              style: TextStyle(color: Colors.white)),
         ),
         body: ListView(
-          children: farmResult
-              .map<Widget>((item) => FarmCard(
-                  id: item['_id'],
-                  humidity: item['humidity'].toDouble(),
-                  temperature: item['temperature'].toDouble(),
-                  name: item['name'],
-                  conditions: item['conditions']))
-              .toList(),
+          children: farmResult.length != 0
+              ? farmResult
+                  .map<Widget>((item) => FarmCard(
+                      id: item['_id'],
+                      humidity: item['humidity'].toDouble(),
+                      temperature: item['temperature'].toDouble(),
+                      name: item['name'],
+                      conditions: item['conditions']))
+                  .toList()
+              : [
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 20),
+                    width: double.infinity,
+                    child: Text(
+                      i18value(context, 'you_have_no_f'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 26),
+                    ),
+                  )
+                ].toList(),
         ),
         drawer: Drawer(
           child: new ListView(
@@ -98,14 +113,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       '${profileResult['name']} ${profileResult['surname']}'),
                   accountEmail: new Text(profileResult['email'])),
               new ListTile(
-                title: new Text('Settings'),
+                title: new Text(i18value(context, 'settingsCaption')),
                 trailing: new Icon(Icons.settings),
                 onTap: () {
                   Navigator.of(context).pushNamed(SettingPage.routeName);
                 },
               ),
               new ListTile(
-                  title: new Text('Logout'),
+                  title: new Text(i18value(context, 'logout')),
                   trailing: new Icon(Icons.exit_to_app),
                   onTap: () => logout())
             ],

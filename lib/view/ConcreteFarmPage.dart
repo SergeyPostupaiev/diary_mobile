@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 
 import '../widgets/animal_card.dart';
 
+import '../localization/i18value.dart';
+
 class ConctcreteFarm extends StatefulWidget {
   static String routeName = '/concreteFarm';
 
@@ -55,8 +57,6 @@ class _ConctcreteFarmState extends State<ConctcreteFarm> {
     setState(() {
       animals = json.decode(animals);
     });
-
-    print(animals);
   }
 
   @override
@@ -86,7 +86,7 @@ class _ConctcreteFarmState extends State<ConctcreteFarm> {
           child: Column(
             children: <Widget>[
               Text(
-                'Conditions',
+                i18value(context, 'f_conditions'),
                 style: TextStyle(
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
@@ -97,7 +97,7 @@ class _ConctcreteFarmState extends State<ConctcreteFarm> {
                 children: <Widget>[
                   SizedBox(height: 20),
                   Text(
-                    'Humidity: $humidity %',
+                    '${i18value(context, 'humidity_s')} $humidity %',
                     style: TextStyle(
                         fontSize: 25,
                         color: defineColor(conditions['humidity']['status'])),
@@ -114,7 +114,7 @@ class _ConctcreteFarmState extends State<ConctcreteFarm> {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Temperature: $temperature %',
+                    '${i18value(context, 'temperature_s')} $temperature °C',
                     style: TextStyle(
                         fontSize: 25,
                         color:
@@ -136,7 +136,7 @@ class _ConctcreteFarmState extends State<ConctcreteFarm> {
                 ],
               ),
               Text(
-                'Animals',
+                i18value(context, 'animals'),
                 style: TextStyle(
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
@@ -162,7 +162,13 @@ class _ConctcreteFarmState extends State<ConctcreteFarm> {
                               ),
                             )
                             .toList()
-                        : [Text('')].toList(),
+                        : [
+                            Text(
+                              i18value(context, 'you_have_no_an'),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 26),
+                            )
+                          ].toList(),
                   ),
                 ),
               ),

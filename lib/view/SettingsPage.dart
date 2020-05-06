@@ -79,11 +79,11 @@ class _SettingPageState extends State<SettingPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'Language',
+                      i18value(context, 'language'),
                       style: TextStyle(fontSize: 26),
                     ),
                     SizedBox(height: 10),
-                    Text('Choosing the interface language')
+                    Text(i18value(context, 'choosing_int_lang'))
                   ],
                 ),
                 onPressed: () => showAlertDialog(context),
@@ -96,7 +96,7 @@ class _SettingPageState extends State<SettingPage> {
   showAlertDialog(BuildContext context) {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text('Choose the language'),
+      title: Text(i18value(context, 'lang_choose')),
       content: Container(
         height: 130,
         child: Column(

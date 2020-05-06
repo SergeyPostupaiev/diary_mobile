@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../localization/i18value.dart';
+
 class RegisterInputs extends StatefulWidget {
   final TextEditingController nameController;
   final TextEditingController surnameController;
@@ -32,7 +34,7 @@ class _RegisterInputsState extends State<RegisterInputs> {
             controller: widget.nameController,
             decoration: InputDecoration(
               icon: Icon(Icons.account_box),
-              hintText: 'First Name',
+              hintText: i18value(context, 'first_name'),
               border: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.white70)),
               hintStyle: TextStyle(color: Colors.black),
@@ -44,7 +46,7 @@ class _RegisterInputsState extends State<RegisterInputs> {
             controller: widget.surnameController,
             decoration: InputDecoration(
               icon: Icon(Icons.account_box),
-              hintText: 'Last Name',
+              hintText: i18value(context, 'last_name'),
               border: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.white70)),
               hintStyle: TextStyle(color: Colors.black),
@@ -56,7 +58,7 @@ class _RegisterInputsState extends State<RegisterInputs> {
             controller: widget.emailController,
             decoration: InputDecoration(
               icon: Icon(Icons.email),
-              hintText: 'Email',
+              hintText: i18value(context, 'email'),
               border: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.white70)),
               hintStyle: TextStyle(color: Colors.black),
@@ -69,7 +71,7 @@ class _RegisterInputsState extends State<RegisterInputs> {
             controller: widget.passwordController,
             decoration: InputDecoration(
               icon: Icon(Icons.lock),
-              hintText: 'Password',
+              hintText: i18value(context, 'password'),
               border: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.white70)),
               hintStyle: TextStyle(color: Colors.black),
@@ -82,7 +84,7 @@ class _RegisterInputsState extends State<RegisterInputs> {
             controller: widget.confirmPasswordController,
             decoration: InputDecoration(
               icon: Icon(Icons.lock),
-              hintText: 'Confirm password',
+              hintText: i18value(context, 'confirm_pass'),
               border: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.white70)),
               hintStyle: TextStyle(color: Colors.black),

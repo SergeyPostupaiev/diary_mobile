@@ -9,6 +9,7 @@ import './view/LoginPage.dart';
 import './view/RegisterPage.dart';
 import './view/ProfilePage.dart';
 import './view/ConcreteFarmPage.dart';
+import './view/ConcreteAnimalPage.dart';
 
 import './localization/localization.dart';
 
@@ -64,6 +65,7 @@ class _MyAppState extends State<MyApp> {
           ProfilePage.routeName: (ctx) => ProfilePage(),
           SettingPage.routeName: (ctx) => SettingPage(),
           ConctcreteFarm.routeName: (ctx) => ConctcreteFarm(),
+          ConcreteAnimal.routeNmae: (ctx) => ConcreteAnimal()
         },
         locale: _locale,
         localeResolutionCallback: (devicelocale, supportedLocales) {

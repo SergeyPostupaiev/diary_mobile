@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../localization/i18value.dart';
+
 class LoginInputs extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
@@ -26,7 +28,7 @@ class _LoginInputsState extends State<LoginInputs> {
             controller: widget.emailController,
             decoration: InputDecoration(
               icon: Icon(Icons.email),
-              hintText: 'Email',
+              hintText: i18value(context, 'email'),
               border: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.white70)),
               hintStyle: TextStyle(color: Colors.black),
@@ -39,7 +41,7 @@ class _LoginInputsState extends State<LoginInputs> {
             controller: widget.passwordController,
             decoration: InputDecoration(
               icon: Icon(Icons.lock),
-              hintText: 'Password',
+              hintText: i18value(context, 'password'),
               border: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.white70)),
               hintStyle: TextStyle(color: Colors.black),

@@ -113,7 +113,9 @@ class _LoginPageState extends State<LoginPage> {
                       emailController: emailController,
                       passwordController: passwordController,
                     ),
-                    BtnSubmit(formSubmit: formSubmit, btnText: 'Sign In'),
+                    BtnSubmit(
+                        formSubmit: formSubmit,
+                        btnText: i18value(context, 'sign_in_btn')),
                     Column(
                       children: <Widget>[
                         FlatButton(
@@ -125,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                                 (Route<dynamic> route) => false);
                           },
                           child: Text(
-                            'Do not have an account?',
+                            i18value(context, 'do_not_have_acc'),
                             style: TextStyle(
                               decoration: TextDecoration.underline,
                             ),
@@ -205,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void formSubmit() {
     if (emailController.text == '' || passwordController.text == '') {
-      showSnackBar('Fill all the inputs, please');
+      showSnackBar(i18value(context, 'fill_all_inp'));
     } else {
       setState(() {
         _isLoading = true;
@@ -218,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
   showAlertDialog(BuildContext context) {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text('Choose the language'),
+      title: Text(i18value(context, 'lang_choose')),
       content: Container(
         height: 130,
         child: Column(
