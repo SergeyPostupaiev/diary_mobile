@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../widgets/animal_card.dart';
+import '../widgets/new_animal.dart';
 
 import '../localization/i18value.dart';
 
@@ -59,6 +60,23 @@ class _ConctcreteFarmState extends State<ConctcreteFarm> {
     });
   }
 
+  pushToAnimals(animalItem) {
+    animals.add(animalItem);
+  }
+
+  startAddNewAnimal(BuildContext ctx) {
+    showModalBottomSheet(
+      context: ctx,
+      builder: (bCtx) {
+        return GestureDetector(
+          onTap: () {},
+          child: AddNewAnimal(),
+          behavior: HitTestBehavior.opaque,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final routeArgs =
@@ -74,6 +92,14 @@ class _ConctcreteFarmState extends State<ConctcreteFarm> {
     return Scaffold(
       appBar: AppBar(
         title: Text('${name[0].toUpperCase() + name.substring(1)}'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.add,
+            ),
+            onPressed: () => startAddNewAnimal(context),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Container(

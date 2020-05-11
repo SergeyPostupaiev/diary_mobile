@@ -194,9 +194,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void showSnackBar(String msg) {
-    print(passwordController.text);
-    print(emailController.text);
-
     Fluttertoast.showToast(
       msg: msg,
       toastLength: Toast.LENGTH_SHORT,

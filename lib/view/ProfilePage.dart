@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import './LoginPage.dart';
 import './SettingsPage.dart';
 import '../widgets/farm_card.dart';
+import '../widgets/new_farm.dart';
 
 import '../localization/i18value.dart';
 
@@ -73,6 +74,23 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  pushToFarms(farmItem) {
+    farmResult.add(farmItem);
+  }
+
+  startAddNewFarm(BuildContext ctx) {
+    showModalBottomSheet(
+      context: ctx,
+      builder: (bCtx) {
+        return GestureDetector(
+          onTap: () {},
+          child: AddNewFarm(pushToFarms),
+          behavior: HitTestBehavior.opaque,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (profileResult == null || farmResult == null) {
@@ -82,6 +100,14 @@ class _ProfilePageState extends State<ProfilePage> {
         appBar: AppBar(
           title: Text(i18value(context, 'your_farms'),
               style: TextStyle(color: Colors.white)),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.add,
+              ),
+              onPressed: () => startAddNewFarm(context),
+            )
+          ],
         ),
         body: ListView(
           children: farmResult.length != 0

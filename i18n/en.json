@@ -43,5 +43,6 @@
   "you_have_no_an": "You have no animals, add please",
   "your_farms": "Your Farms",
   "you_have_no_f": "You have no farms, add please",
-  "logout": "Logout"
+  "logout": "Logout",
+  "add_animal": "Add animal"
 }
